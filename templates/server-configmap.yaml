@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "couchbase-operator.fullname" . }}
+  labels:
+    app: {{ template "couchbase-operator.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{ .Values.server.name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  custom-resources.yaml: |-
+    {{- include "config.yaml.tpl" . | indent 4}}

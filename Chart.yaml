@@ -1,0 +1,9 @@
+apiVersion: v1
+description: Couchbase is a distributed multi-model NoSQL document-oriented database
+name: couchbase-operator
+version: 1.0.0
+home: https://www.couchbase.com/
+icon: https://avatars1.githubusercontent.com/u/605755
+maintainers:
+  - name: dimitrov.vlado
+    email: dimitrov.vlado@gmail.com

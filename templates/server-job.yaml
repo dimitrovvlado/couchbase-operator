@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "couchbase-operator.name" . }}-job
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded
+  labels:
+    app: {{ template "couchbase-operator.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      name: {{ template "couchbase-operator.name" . }}-job
+      labels:
+        app: {{ template "couchbase-operator.name" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      containers:
+        - name: hyperkube
+          image: "{{ .Values.hyperkube.image.name }}:{{ .Values.hyperkube.image.tag }}"
+          command:
+            - ./kubectl
+            - apply
+            - -f
+            - /tmp/mixer/custom-resources.yaml
+          volumeMounts:
+            - mountPath: "/tmp/mixer"
+              name: tmp-configmap-mixer
+      volumes:
+        - name: tmp-configmap-mixer
+          configMap:
+            name: {{ template "couchbase-operator.fullname" . }}
+      restartPolicy: Never # CRD might take some time till they are available to comsume

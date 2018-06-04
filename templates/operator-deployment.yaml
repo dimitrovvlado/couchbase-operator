@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "couchbase-operator.fullname" . }}
+  labels:
+    app: {{ template "couchbase-operator.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "couchbase-operator.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Values.operator.serviceAccount.name }} #Fixme with template
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
+          imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          command:
+          - couchbase-operator
+          args:
+          - -create-crd
+          env:
+          - name: MY_POD_NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: {{ .Values.service.internalPort }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}

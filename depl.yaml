@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: couchbase-couchbase-operator
+  labels:
+    app: couchbase-operator
+    chart: couchbase-operator-1.0.0
+    release: couchbase
+    heritage: Tiller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: couchbase-operator
+        release: couchbase
+    spec:
+      serviceAccountName: jenkins #Fixme with template
+      containers:
+        - name: couchbase-operator
+          image: "couchbase/k8s-operator:0.8.1-beta"
+          imagePullPolicy: IfNotPresent
+          command:
+          - couchbase-operator
+          args:
+          - -create-crd
+          env:
+          - name: MY_POD_NAMESPACE
+            value: vdimitrov
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+          resources:
+            {}

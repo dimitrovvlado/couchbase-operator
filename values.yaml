@@ -1,0 +1,57 @@
+# Couchbase image repository
+rbac:
+  create: false
+
+operator:
+
+  ## operator container image
+  ##
+  image:
+    repository: couchbase/k8s-operator
+    tag: 0.8.1-beta
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    create: false
+    name: prometheus
+
+server:
+
+  ## server replicas names
+  ##
+  name: cb-example
+  
+  ## server container image
+  ##
+  image:
+    name: couchbase/server
+    tag: enterprise-5.0.1
+
+  ## Server replicas
+  ##
+  replicas: 3
+  
+  ## Password for the servers
+  ##
+  authSecret: strongpassword
+
+  ## Expose the admin console 
+  ##
+  exposeAdminConsole: true
+
+service:
+  name: couchbase-operator
+  type: ClusterIP
+  internalPort: 8080
+
+hyperkube:
+
+  ## hyperkube container image
+  ##
+  image:
+    name: couchbase/server
+    tag: enterprise-5.0.1
+
+resources: {}
+
+nodeSelector: {}
