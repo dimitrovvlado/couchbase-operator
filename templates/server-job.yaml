@@ -27,12 +27,12 @@ spec:
             - ./kubectl
             - apply
             - -f
-            - /tmp/mixer/custom-resources.yaml
+            - /tmp/cfg/custom-resources.yaml
           volumeMounts:
-            - mountPath: "/tmp/mixer"
-              name: tmp-configmap-mixer
+            - mountPath: "/tmp/cfg"
+              name: tmp-configmap
       volumes:
-        - name: tmp-configmap-mixer
+        - name: tmp-configmap
           configMap:
             name: {{ template "couchbase-operator.fullname" . }}
       restartPolicy: Never # CRD might take some time till they are available to comsume

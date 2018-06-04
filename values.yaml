@@ -49,8 +49,8 @@ hyperkube:
   ## hyperkube container image
   ##
   image:
-    name: couchbase/server
-    tag: enterprise-5.0.1
+    name: quay.io/coreos/hyperkube
+    tag: v1.7.6_coreos.0
 
 resources: {}
 
