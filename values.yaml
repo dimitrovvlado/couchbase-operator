@@ -13,7 +13,7 @@ operator:
 
   serviceAccount:
     create: false
-    name: prometheus
+    name: default
 
 server:
 
@@ -31,9 +31,10 @@ server:
   ##
   replicas: 3
   
-  ## Password for the servers
+  ## Credentials for the servers
   ##
-  authSecret: strongpassword
+  authUsername: Administrator
+  authSecret: password
 
   ## Expose the admin console 
   ##

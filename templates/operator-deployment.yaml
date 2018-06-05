@@ -9,13 +9,15 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "couchbase-operator.name" . }}
   template:
     metadata:
       labels:
         app: {{ template "couchbase-operator.name" . }}
-        release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ .Values.operator.serviceAccount.name }} #Fixme with template
+      serviceAccountName: {{ template "couchbase-operator.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
@@ -37,6 +39,9 @@ spec:
             httpGet:
               path: /readyz
               port: {{ .Values.service.internalPort }}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 19
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

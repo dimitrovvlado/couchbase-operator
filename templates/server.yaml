@@ -2,12 +2,12 @@
 apiVersion: couchbase.database.couchbase.com/v1beta1
 kind: CouchbaseCluster
 metadata:
-  name: {{ .Values.server.name }}
+  name: cb-example
 spec:
   baseImage: {{ .Values.server.image.name }}
   version: {{ .Values.server.image.tag }}
-  authSecret: {{ .Values.server.authSecret }}
-  exposeAdminConsole: {{ .Values.server.exposeAdminConsole }}
+  authSecret: {{ template "couchbase-operator.name" . }}
+  exposeAdminConsole: true
   cluster:
     dataServiceMemoryQuota: 256
     indexServiceMemoryQuota: 256
@@ -25,7 +25,7 @@ spec:
       enableFlush: true
       enableIndexReplica: false
   servers:
-    - size: {{ .Values.server.replicas }}
+    - size: 1
       name: all_services
       services:
         - data

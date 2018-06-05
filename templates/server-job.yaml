@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: {{ template "couchbase-operator.name" . }}-job
   annotations:
-    "helm.sh/hook": post-install
+    "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     app: {{ template "couchbase-operator.name" . }}
@@ -27,7 +27,7 @@ spec:
             - ./kubectl
             - apply
             - -f
-            - /tmp/cfg/custom-resources.yaml
+            - /tmp/cfg/server-configmap.yaml
           volumeMounts:
             - mountPath: "/tmp/cfg"
               name: tmp-configmap
