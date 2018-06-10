@@ -20,6 +20,7 @@ spec:
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
+      serviceAccountName: {{ template "couchbase-operator.serviceAccountName" . }}
       containers:
         - name: hyperkube
           image: "{{ .Values.hyperkube.image.name }}:{{ .Values.hyperkube.image.tag }}"

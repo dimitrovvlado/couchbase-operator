@@ -1,7 +1,4 @@
 # Couchbase image repository
-rbac:
-  create: false
-
 operator:
 
   ## operator container image
@@ -12,7 +9,7 @@ operator:
     pullPolicy: IfNotPresent
 
   serviceAccount:
-    create: false
+    create: true
     name: default
 
 server:

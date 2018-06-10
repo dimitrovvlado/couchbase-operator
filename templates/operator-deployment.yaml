@@ -17,7 +17,7 @@ spec:
       labels:
         app: {{ template "couchbase-operator.name" . }}
     spec:
-      serviceAccountName: {{ template "couchbase-operator.fullname" . }}
+      serviceAccountName: {{ template "couchbase-operator.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
